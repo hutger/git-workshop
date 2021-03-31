@@ -1,0 +1,722 @@
+
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="fb:pages" content="115407078489594" />
+<meta name="description" content="Compare git rebase with the related git merge command and identify all of the potential opportunities to incorporate rebasing into the typical Git workflow">
+<meta name="author" content="Atlassian">
+<link rel="canonical" href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing"/>
+<title>Merging vs. Rebasing | Atlassian Git Tutorial</title>
+<style>body { display: none; }</style>
+<link href="https://wac-cdn.atlassian.com" rel="preconnect">
+<link rel="alternate" href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing" hreflang="x-default" />
+<link rel="alternate" href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing" hreflang="en" />
+<link rel="alternate" href="https://www.atlassian.com/ja/git/tutorials/merging-vs-rebasing" hreflang="ja" />
+<link rel="alternate" href="https://www.atlassian.com/fr/git/tutorials/merging-vs-rebasing" hreflang="fr" />
+<link rel="alternate" href="https://www.atlassian.com/de/git/tutorials/merging-vs-rebasing" hreflang="de" />
+<link rel="alternate" href="https://www.atlassian.com/es/git/tutorials/merging-vs-rebasing" hreflang="es" />
+<link rel="alternate" href="https://www.atlassian.com/br/git/tutorials/merging-vs-rebasing" hreflang="pt-BR" />
+<link rel="alternate" href="https://www.atlassian.com/zh/git/tutorials/merging-vs-rebasing" hreflang="zh-Hans" />
+<link rel="alternate" href="https://www.atlassian.com/ko/git/tutorials/merging-vs-rebasing" hreflang="ko" />
+<link rel="alternate" href="https://www.atlassian.com/ru/git/tutorials/merging-vs-rebasing" hreflang="ru" />
+<link rel="alternate" href="https://www.atlassian.com/pl/git/tutorials/merging-vs-rebasing" hreflang="pl" />
+<link rel="alternate" href="https://www.atlassian.com/it/git/tutorials/merging-vs-rebasing" hreflang="it" />
+<link rel="alternate" href="https://www.atlassian.com/nl/git/tutorials/merging-vs-rebasing" hreflang="nl" />
+<link rel="alternate" href="https://www.atlassian.com/hu/git/tutorials/merging-vs-rebasing" hreflang="hu" />
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="https://wac-cdn.atlassian.com/assets/img/favicons/gitguide/apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://wac-cdn.atlassian.com/assets/img/favicons/gitguide/apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://wac-cdn.atlassian.com/assets/img/favicons/gitguide/apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://wac-cdn.atlassian.com/assets/img/favicons/gitguide/apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://wac-cdn.atlassian.com/assets/img/favicons/gitguide/apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="https://wac-cdn.atlassian.com/assets/img/favicons/gitguide/apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="https://wac-cdn.atlassian.com/assets/img/favicons/gitguide/favicon.png" sizes="32x32" />
+<link rel="mask-icon" href="https://wac-cdn.atlassian.com/assets/img/favicons/gitguide/safari-pinned-tab.svg" color="#59afe1">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="https://wac-cdn.atlassian.com/assets/img/favicons/gitguide/mstile-144x144.png" />
+<meta name="theme-color" content="#205081">
+<meta property="og:title" content="Merging vs. Rebasing | Atlassian Git Tutorial" />
+<meta property="og:description" content="Compare git rebase with the related git merge command and identify all of the potential opportunities to incorporate rebasing into the typical Git workflow" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://www.atlassian.com/git/tutorials/merging-vs-rebasing" />
+<meta property="og:site_name" content="Atlassian" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@Atlassian" />
+<!-- OneTrust Cookies Consent Notice (Production CDN, www.atlassian.com, en-GB) start -->
+<script src="https://cdn.cookielaw.org/consent/141bbadf-8293-4d74-9552-81ec52e16c66.js" type="text/javascript" charset="UTF-8"></script>
+<script type="text/javascript">
+function OptanonWrapper() { }
+</script>
+<!-- OneTrust Cookies Consent Notice (Production CDN, www.atlassian.com, en-GB) end -->
+<script type="text/javascript">
+var LOCALIZED_PRICING_CONTENTFUL_SPACE = "3s3v3nq72la0";
+var LOCALIZED_PRICING_CONTENTFUL_ENVIRONMENT = "master";
+var LOCALIZED_PRICING_CONTENTFUL_ACCESS_TOKEN = "b9c3ea8d9c664146e9c7dd136a1d40ff8415715c3ef8ee222536f36fb2056613";
+var LOCALIZED_PRICING_USE_GEO_CURRENCY = true;
+</script>
+<script type="text/javascript">
+window.NREUM||(NREUM={});NREUM.init={privacy:{cookies_enabled:true}};
+window.NREUM||(NREUM={}),__nr_require=function(t,e,n){function r(n){if(!e[n]){var o=e[n]={exports:{}};t[n][0].call(o.exports,function(e){var o=t[n][1][e];return r(o||e)},o,o.exports)}return e[n].exports}if("function"==typeof __nr_require)return __nr_require;for(var o=0;o<n.length;o++)r(n[o]);return r}({1:[function(t,e,n){function r(t){try{c.console&&console.log(t)}catch(e){}}var o,i=t("ee"),a=t(26),c={};try{o=localStorage.getItem("__nr_flags").split(","),console&&"function"==typeof console.log&&(c.console=!0,o.indexOf("dev")!==-1&&(c.dev=!0),o.indexOf("nr_dev")!==-1&&(c.nrDev=!0))}catch(s){}c.nrDev&&i.on("internal-error",function(t){r(t.stack)}),c.dev&&i.on("fn-err",function(t,e,n){r(n.stack)}),c.dev&&(r("NR AGENT IN DEVELOPMENT MODE"),r("flags: "+a(c,function(t,e){return t}).join(", ")))},{}],2:[function(t,e,n){function r(t,e,n,r,c){try{l?l-=1:o(c||new UncaughtException(t,e,n),!0)}catch(f){try{i("ierr",[f,s.now(),!0])}catch(d){}}return"function"==typeof u&&u.apply(this,a(arguments))}function UncaughtException(t,e,n){this.message=t||"Uncaught error with no additional information",this.sourceURL=e,this.line=n}function o(t,e){var n=e?null:s.now();i("err",[t,n])}var i=t("handle"),a=t(27),c=t("ee"),s=t("loader"),f=t("gos"),u=window.onerror,d=!1,p="nr@seenError",l=0;s.features.err=!0,t(1),window.onerror=r;try{throw new Error}catch(h){"stack"in h&&(t(13),t(12),"addEventListener"in window&&t(6),s.xhrWrappable&&t(14),d=!0)}c.on("fn-start",function(t,e,n){d&&(l+=1)}),c.on("fn-err",function(t,e,n){d&&!n[p]&&(f(n,p,function(){return!0}),this.thrown=!0,o(n))}),c.on("fn-end",function(){d&&!this.thrown&&l>0&&(l-=1)}),c.on("internal-error",function(t){i("ierr",[t,s.now(),!0])})},{}],3:[function(t,e,n){t("loader").features.ins=!0},{}],4:[function(t,e,n){function r(){_++,T=g.hash,this[u]=y.now()}function o(){_--,g.hash!==T&&i(0,!0);var t=y.now();this[h]=~~this[h]+t-this[u],this[d]=t}function i(t,e){E.emit("newURL",[""+g,e])}function a(t,e){t.on(e,function(){this[e]=y.now()})}var c="-start",s="-end",f="-body",u="fn"+c,d="fn"+s,p="cb"+c,l="cb"+s,h="jsTime",m="fetch",v="addEventListener",w=window,g=w.location,y=t("loader");if(w[v]&&y.xhrWrappable){var x=t(10),b=t(11),E=t(8),R=t(6),O=t(13),N=t(7),M=t(14),P=t(9),S=t("ee"),C=S.get("tracer");t(16),y.features.spa=!0;var T,_=0;S.on(u,r),S.on(p,r),S.on(d,o),S.on(l,o),S.buffer([u,d,"xhr-done","xhr-resolved"]),R.buffer([u]),O.buffer(["setTimeout"+s,"clearTimeout"+c,u]),M.buffer([u,"new-xhr","send-xhr"+c]),N.buffer([m+c,m+"-done",m+f+c,m+f+s]),E.buffer(["newURL"]),x.buffer([u]),b.buffer(["propagate",p,l,"executor-err","resolve"+c]),C.buffer([u,"no-"+u]),P.buffer(["new-jsonp","cb-start","jsonp-error","jsonp-end"]),a(M,"send-xhr"+c),a(S,"xhr-resolved"),a(S,"xhr-done"),a(N,m+c),a(N,m+"-done"),a(P,"new-jsonp"),a(P,"jsonp-end"),a(P,"cb-start"),E.on("pushState-end",i),E.on("replaceState-end",i),w[v]("hashchange",i,!0),w[v]("load",i,!0),w[v]("popstate",function(){i(0,_>1)},!0)}},{}],5:[function(t,e,n){function r(t){}if(window.performance&&window.performance.timing&&window.performance.getEntriesByType){var o=t("ee"),i=t("handle"),a=t(13),c=t(12),s="learResourceTimings",f="addEventListener",u="resourcetimingbufferfull",d="bstResource",p="resource",l="-start",h="-end",m="fn"+l,v="fn"+h,w="bstTimer",g="pushState",y=t("loader");y.features.stn=!0,t(8),"addEventListener"in window&&t(6);var x=NREUM.o.EV;o.on(m,function(t,e){var n=t[0];n instanceof x&&(this.bstStart=y.now())}),o.on(v,function(t,e){var n=t[0];n instanceof x&&i("bst",[n,e,this.bstStart,y.now()])}),a.on(m,function(t,e,n){this.bstStart=y.now(),this.bstType=n}),a.on(v,function(t,e){i(w,[e,this.bstStart,y.now(),this.bstType])}),c.on(m,function(){this.bstStart=y.now()}),c.on(v,function(t,e){i(w,[e,this.bstStart,y.now(),"requestAnimationFrame"])}),o.on(g+l,function(t){this.time=y.now(),this.startPath=location.pathname+location.hash}),o.on(g+h,function(t){i("bstHist",[location.pathname+location.hash,this.startPath,this.time])}),f in window.performance&&(window.performance["c"+s]?window.performance[f](u,function(t){i(d,[window.performance.getEntriesByType(p)]),window.performance["c"+s]()},!1):window.performance[f]("webkit"+u,function(t){i(d,[window.performance.getEntriesByType(p)]),window.performance["webkitC"+s]()},!1)),document[f]("scroll",r,{passive:!0}),document[f]("keypress",r,!1),document[f]("click",r,!1)}},{}],6:[function(t,e,n){function r(t){for(var e=t;e&&!e.hasOwnProperty(u);)e=Object.getPrototypeOf(e);e&&o(e)}function o(t){c.inPlace(t,[u,d],"-",i)}function i(t,e){return t[1]}var a=t("ee").get("events"),c=t("wrap-function")(a,!0),s=t("gos"),f=XMLHttpRequest,u="addEventListener",d="removeEventListener";e.exports=a,"getPrototypeOf"in Object?(r(document),r(window),r(f.prototype)):f.prototype.hasOwnProperty(u)&&(o(window),o(f.prototype)),a.on(u+"-start",function(t,e){var n=t[1],r=s(n,"nr@wrapped",function(){function t(){if("function"==typeof n.handleEvent)return n.handleEvent.apply(n,arguments)}var e={object:t,"function":n}[typeof n];return e?c(e,"fn-",null,e.name||"anonymous"):n});this.wrapped=t[1]=r}),a.on(d+"-start",function(t){t[1]=this.wrapped||t[1]})},{}],7:[function(t,e,n){function r(t,e,n){var r=t[e];"function"==typeof r&&(t[e]=function(){var t=i(arguments),e={};o.emit(n+"before-start",[t],e);var a;e[m]&&e[m].dt&&(a=e[m].dt);var c=r.apply(this,t);return o.emit(n+"start",[t,a],c),c.then(function(t){return o.emit(n+"end",[null,t],c),t},function(t){throw o.emit(n+"end",[t],c),t})})}var o=t("ee").get("fetch"),i=t(27),a=t(26);e.exports=o;var c=window,s="fetch-",f=s+"body-",u=["arrayBuffer","blob","json","text","formData"],d=c.Request,p=c.Response,l=c.fetch,h="prototype",m="nr@context";d&&p&&l&&(a(u,function(t,e){r(d[h],e,f),r(p[h],e,f)}),r(c,"fetch",s),o.on(s+"end",function(t,e){var n=this;if(e){var r=e.headers.get("content-length");null!==r&&(n.rxSize=r),o.emit(s+"done",[null,e],n)}else o.emit(s+"done",[t],n)}))},{}],8:[function(t,e,n){var r=t("ee").get("history"),o=t("wrap-function")(r);e.exports=r;var i=window.history&&window.history.constructor&&window.history.constructor.prototype,a=window.history;i&&i.pushState&&i.replaceState&&(a=i),o.inPlace(a,["pushState","replaceState"],"-")},{}],9:[function(t,e,n){function r(t){function e(){s.emit("jsonp-end",[],p),t.removeEventListener("load",e,!1),t.removeEventListener("error",n,!1)}function n(){s.emit("jsonp-error",[],p),s.emit("jsonp-end",[],p),t.removeEventListener("load",e,!1),t.removeEventListener("error",n,!1)}var r=t&&"string"==typeof t.nodeName&&"script"===t.nodeName.toLowerCase();if(r){var o="function"==typeof t.addEventListener;if(o){var a=i(t.src);if(a){var u=c(a),d="function"==typeof u.parent[u.key];if(d){var p={};f.inPlace(u.parent,[u.key],"cb-",p),t.addEventListener("load",e,!1),t.addEventListener("error",n,!1),s.emit("new-jsonp",[t.src],p)}}}}}function o(){return"addEventListener"in window}function i(t){var e=t.match(u);return e?e[1]:null}function a(t,e){var n=t.match(p),r=n[1],o=n[3];return o?a(o,e[r]):e[r]}function c(t){var e=t.match(d);return e&&e.length>=3?{key:e[2],parent:a(e[1],window)}:{key:t,parent:window}}var s=t("ee").get("jsonp"),f=t("wrap-function")(s);if(e.exports=s,o()){var u=/[?&](?:callback|cb)=([^&#]+)/,d=/(.*)\.([^.]+)/,p=/^(\w+)(\.|$)(.*)$/,l=["appendChild","insertBefore","replaceChild"];Node&&Node.prototype&&Node.prototype.appendChild?f.inPlace(Node.prototype,l,"dom-"):(f.inPlace(HTMLElement.prototype,l,"dom-"),f.inPlace(HTMLHeadElement.prototype,l,"dom-"),f.inPlace(HTMLBodyElement.prototype,l,"dom-")),s.on("dom-start",function(t){r(t[0])})}},{}],10:[function(t,e,n){var r=t("ee").get("mutation"),o=t("wrap-function")(r),i=NREUM.o.MO;e.exports=r,i&&(window.MutationObserver=function(t){return this instanceof i?new i(o(t,"fn-")):i.apply(this,arguments)},MutationObserver.prototype=i.prototype)},{}],11:[function(t,e,n){function r(t){var e=a.context(),n=c(t,"executor-",e),r=new f(n);return a.context(r).getCtx=function(){return e},a.emit("new-promise",[r,e],e),r}function o(t,e){return e}var i=t("wrap-function"),a=t("ee").get("promise"),c=i(a),s=t(26),f=NREUM.o.PR;e.exports=a,f&&(window.Promise=r,["all","race"].forEach(function(t){var e=f[t];f[t]=function(n){function r(t){return function(){a.emit("propagate",[null,!o],i),o=o||!t}}var o=!1;s(n,function(e,n){Promise.resolve(n).then(r("all"===t),r(!1))});var i=e.apply(f,arguments),c=f.resolve(i);return c}}),["resolve","reject"].forEach(function(t){var e=f[t];f[t]=function(t){var n=e.apply(f,arguments);return t!==n&&a.emit("propagate",[t,!0],n),n}}),f.prototype["catch"]=function(t){return this.then(null,t)},f.prototype=Object.create(f.prototype,{constructor:{value:r}}),s(Object.getOwnPropertyNames(f),function(t,e){try{r[e]=f[e]}catch(n){}}),a.on("executor-start",function(t){t[0]=c(t[0],"resolve-",this),t[1]=c(t[1],"resolve-",this)}),a.on("executor-err",function(t,e,n){t[1](n)}),c.inPlace(f.prototype,["then"],"then-",o),a.on("then-start",function(t,e){this.promise=e,t[0]=c(t[0],"cb-",this),t[1]=c(t[1],"cb-",this)}),a.on("then-end",function(t,e,n){this.nextPromise=n;var r=this.promise;a.emit("propagate",[r,!0],n)}),a.on("cb-end",function(t,e,n){a.emit("propagate",[n,!0],this.nextPromise)}),a.on("propagate",function(t,e,n){this.getCtx&&!e||(this.getCtx=function(){if(t instanceof Promise)var e=a.context(t);return e&&e.getCtx?e.getCtx():this})}),r.toString=function(){return""+f})},{}],12:[function(t,e,n){var r=t("ee").get("raf"),o=t("wrap-function")(r),i="equestAnimationFrame";e.exports=r,o.inPlace(window,["r"+i,"mozR"+i,"webkitR"+i,"msR"+i],"raf-"),r.on("raf-start",function(t){t[0]=o(t[0],"fn-")})},{}],13:[function(t,e,n){function r(t,e,n){t[0]=a(t[0],"fn-",null,n)}function o(t,e,n){this.method=n,this.timerDuration=isNaN(t[1])?0:+t[1],t[0]=a(t[0],"fn-",this,n)}var i=t("ee").get("timer"),a=t("wrap-function")(i),c="setTimeout",s="setInterval",f="clearTimeout",u="-start",d="-";e.exports=i,a.inPlace(window,[c,"setImmediate"],c+d),a.inPlace(window,[s],s+d),a.inPlace(window,[f,"clearImmediate"],f+d),i.on(s+u,r),i.on(c+u,o)},{}],14:[function(t,e,n){function r(t,e){d.inPlace(e,["onreadystatechange"],"fn-",c)}function o(){var t=this,e=u.context(t);t.readyState>3&&!e.resolved&&(e.resolved=!0,u.emit("xhr-resolved",[],t)),d.inPlace(t,g,"fn-",c)}function i(t){y.push(t),h&&(b?b.then(a):v?v(a):(E=-E,R.data=E))}function a(){for(var t=0;t<y.length;t++)r([],y[t]);y.length&&(y=[])}function c(t,e){return e}function s(t,e){for(var n in t)e[n]=t[n];return e}t(6);var f=t("ee"),u=f.get("xhr"),d=t("wrap-function")(u),p=NREUM.o,l=p.XHR,h=p.MO,m=p.PR,v=p.SI,w="readystatechange",g=["onload","onerror","onabort","onloadstart","onloadend","onprogress","ontimeout"],y=[];e.exports=u;var x=window.XMLHttpRequest=function(t){var e=new l(t);try{u.emit("new-xhr",[e],e),e.addEventListener(w,o,!1)}catch(n){try{u.emit("internal-error",[n])}catch(r){}}return e};if(s(l,x),x.prototype=l.prototype,d.inPlace(x.prototype,["open","send"],"-xhr-",c),u.on("send-xhr-start",function(t,e){r(t,e),i(e)}),u.on("open-xhr-start",r),h){var b=m&&m.resolve();if(!v&&!m){var E=1,R=document.createTextNode(E);new h(a).observe(R,{characterData:!0})}}else f.on("fn-end",function(t){t[0]&&t[0].type===w||a()})},{}],15:[function(t,e,n){function r(t){if(!c(t))return null;var e=window.NREUM;if(!e.loader_config)return null;var n=(e.loader_config.accountID||"").toString()||null,r=(e.loader_config.agentID||"").toString()||null,f=(e.loader_config.trustKey||"").toString()||null;if(!n||!r)return null;var h=l.generateSpanId(),m=l.generateTraceId(),v=Date.now(),w={spanId:h,traceId:m,timestamp:v};return(t.sameOrigin||s(t)&&p())&&(w.traceContextParentHeader=o(h,m),w.traceContextStateHeader=i(h,v,n,r,f)),(t.sameOrigin&&!u()||!t.sameOrigin&&s(t)&&d())&&(w.newrelicHeader=a(h,m,v,n,r,f)),w}function o(t,e){return"00-"+e+"-"+t+"-01"}function i(t,e,n,r,o){var i=0,a="",c=1,s="",f="";return o+"@nr="+i+"-"+c+"-"+n+"-"+r+"-"+t+"-"+a+"-"+s+"-"+f+"-"+e}function a(t,e,n,r,o,i){var a="btoa"in window&&"function"==typeof window.btoa;if(!a)return null;var c={v:[0,1],d:{ty:"Browser",ac:r,ap:o,id:t,tr:e,ti:n}};return i&&r!==i&&(c.d.tk=i),btoa(JSON.stringify(c))}function c(t){return f()&&s(t)}function s(t){var e=!1,n={};if("init"in NREUM&&"distributed_tracing"in NREUM.init&&(n=NREUM.init.distributed_tracing),t.sameOrigin)e=!0;else if(n.allowed_origins instanceof Array)for(var r=0;r<n.allowed_origins.length;r++){var o=h(n.allowed_origins[r]);if(t.hostname===o.hostname&&t.protocol===o.protocol&&t.port===o.port){e=!0;break}}return e}function f(){return"init"in NREUM&&"distributed_tracing"in NREUM.init&&!!NREUM.init.distributed_tracing.enabled}function u(){return"init"in NREUM&&"distributed_tracing"in NREUM.init&&!!NREUM.init.distributed_tracing.exclude_newrelic_header}function d(){return"init"in NREUM&&"distributed_tracing"in NREUM.init&&NREUM.init.distributed_tracing.cors_use_newrelic_header!==!1}function p(){return"init"in NREUM&&"distributed_tracing"in NREUM.init&&!!NREUM.init.distributed_tracing.cors_use_tracecontext_headers}var l=t(23),h=t(17);e.exports={generateTracePayload:r,shouldGenerateTrace:c}},{}],16:[function(t,e,n){function r(t){var e=this.params,n=this.metrics;if(!this.ended){this.ended=!0;for(var r=0;r<p;r++)t.removeEventListener(d[r],this.listener,!1);e.aborted||(n.duration=a.now()-this.startTime,this.loadCaptureCalled||4!==t.readyState?null==e.status&&(e.status=0):i(this,t),n.cbTime=this.cbTime,u.emit("xhr-done",[t],t),c("xhr",[e,n,this.startTime]))}}function o(t,e){var n=s(e),r=t.params;r.host=n.hostname+":"+n.port,r.pathname=n.pathname,t.parsedOrigin=s(e),t.sameOrigin=t.parsedOrigin.sameOrigin}function i(t,e){t.params.status=e.status;var n=v(e,t.lastSize);if(n&&(t.metrics.rxSize=n),t.sameOrigin){var r=e.getResponseHeader("X-NewRelic-App-Data");r&&(t.params.cat=r.split(", ").pop())}t.loadCaptureCalled=!0}var a=t("loader");if(a.xhrWrappable){var c=t("handle"),s=t(17),f=t(15).generateTracePayload,u=t("ee"),d=["load","error","abort","timeout"],p=d.length,l=t("id"),h=t(21),m=t(20),v=t(18),w=window.XMLHttpRequest;a.features.xhr=!0,t(14),t(7),u.on("new-xhr",function(t){var e=this;e.totalCbs=0,e.called=0,e.cbTime=0,e.end=r,e.ended=!1,e.xhrGuids={},e.lastSize=null,e.loadCaptureCalled=!1,t.addEventListener("load",function(n){i(e,t)},!1),h&&(h>34||h<10)||window.opera||t.addEventListener("progress",function(t){e.lastSize=t.loaded},!1)}),u.on("open-xhr-start",function(t){this.params={method:t[0]},o(this,t[1]),this.metrics={}}),u.on("open-xhr-end",function(t,e){"loader_config"in NREUM&&"xpid"in NREUM.loader_config&&this.sameOrigin&&e.setRequestHeader("X-NewRelic-ID",NREUM.loader_config.xpid);var n=f(this.parsedOrigin);if(n){var r=!1;n.newrelicHeader&&(e.setRequestHeader("newrelic",n.newrelicHeader),r=!0),n.traceContextParentHeader&&(e.setRequestHeader("traceparent",n.traceContextParentHeader),n.traceContextStateHeader&&e.setRequestHeader("tracestate",n.traceContextStateHeader),r=!0),r&&(this.dt=n)}}),u.on("send-xhr-start",function(t,e){var n=this.metrics,r=t[0],o=this;if(n&&r){var i=m(r);i&&(n.txSize=i)}this.startTime=a.now(),this.listener=function(t){try{"abort"!==t.type||o.loadCaptureCalled||(o.params.aborted=!0),("load"!==t.type||o.called===o.totalCbs&&(o.onloadCalled||"function"!=typeof e.onload))&&o.end(e)}catch(n){try{u.emit("internal-error",[n])}catch(r){}}};for(var c=0;c<p;c++)e.addEventListener(d[c],this.listener,!1)}),u.on("xhr-cb-time",function(t,e,n){this.cbTime+=t,e?this.onloadCalled=!0:this.called+=1,this.called!==this.totalCbs||!this.onloadCalled&&"function"==typeof n.onload||this.end(n)}),u.on("xhr-load-added",function(t,e){var n=""+l(t)+!!e;this.xhrGuids&&!this.xhrGuids[n]&&(this.xhrGuids[n]=!0,this.totalCbs+=1)}),u.on("xhr-load-removed",function(t,e){var n=""+l(t)+!!e;this.xhrGuids&&this.xhrGuids[n]&&(delete this.xhrGuids[n],this.totalCbs-=1)}),u.on("addEventListener-end",function(t,e){e instanceof w&&"load"===t[0]&&u.emit("xhr-load-added",[t[1],t[2]],e)}),u.on("removeEventListener-end",function(t,e){e instanceof w&&"load"===t[0]&&u.emit("xhr-load-removed",[t[1],t[2]],e)}),u.on("fn-start",function(t,e,n){e instanceof w&&("onload"===n&&(this.onload=!0),("load"===(t[0]&&t[0].type)||this.onload)&&(this.xhrCbStart=a.now()))}),u.on("fn-end",function(t,e){this.xhrCbStart&&u.emit("xhr-cb-time",[a.now()-this.xhrCbStart,this.onload,e],e)}),u.on("fetch-before-start",function(t){function e(t,e){var n=!1;return e.newrelicHeader&&(t.set("newrelic",e.newrelicHeader),n=!0),e.traceContextParentHeader&&(t.set("traceparent",e.traceContextParentHeader),e.traceContextStateHeader&&t.set("tracestate",e.traceContextStateHeader),n=!0),n}var n,r=t[1]||{};"string"==typeof t[0]?n=t[0]:t[0]&&t[0].url&&(n=t[0].url),n&&(this.parsedOrigin=s(n),this.sameOrigin=this.parsedOrigin.sameOrigin);var o=f(this.parsedOrigin);if(o&&(o.newrelicHeader||o.traceContextParentHeader))if("string"==typeof t[0]){var i={};for(var a in r)i[a]=r[a];i.headers=new Headers(r.headers||{}),e(i.headers,o)&&(this.dt=o),t.length>1?t[1]=i:t.push(i)}else t[0]&&t[0].headers&&e(t[0].headers,o)&&(this.dt=o)})}},{}],17:[function(t,e,n){var r={};e.exports=function(t){if(t in r)return r[t];var e=document.createElement("a"),n=window.location,o={};e.href=t,o.port=e.port;var i=e.href.split("://");!o.port&&i[1]&&(o.port=i[1].split("/")[0].split("@").pop().split(":")[1]),o.port&&"0"!==o.port||(o.port="https"===i[0]?"443":"80"),o.hostname=e.hostname||n.hostname,o.pathname=e.pathname,o.protocol=i[0],"/"!==o.pathname.charAt(0)&&(o.pathname="/"+o.pathname);var a=!e.protocol||":"===e.protocol||e.protocol===n.protocol,c=e.hostname===document.domain&&e.port===n.port;return o.sameOrigin=a&&(!e.hostname||c),"/"===o.pathname&&(r[t]=o),o}},{}],18:[function(t,e,n){function r(t,e){var n=t.responseType;return"json"===n&&null!==e?e:"arraybuffer"===n||"blob"===n||"json"===n?o(t.response):"text"===n||""===n||void 0===n?o(t.responseText):void 0}var o=t(20);e.exports=r},{}],19:[function(t,e,n){function r(){}function o(t,e,n){return function(){return i(t,[f.now()].concat(c(arguments)),e?null:this,n),e?void 0:this}}var i=t("handle"),a=t(26),c=t(27),s=t("ee").get("tracer"),f=t("loader"),u=NREUM;"undefined"==typeof window.newrelic&&(newrelic=u);var d=["setPageViewName","setCustomAttribute","setErrorHandler","finished","addToTrace","inlineHit","addRelease"],p="api-",l=p+"ixn-";a(d,function(t,e){u[e]=o(p+e,!0,"api")}),u.addPageAction=o(p+"addPageAction",!0),u.setCurrentRouteName=o(p+"routeName",!0),e.exports=newrelic,u.interaction=function(){return(new r).get()};var h=r.prototype={createTracer:function(t,e){var n={},r=this,o="function"==typeof e;return i(l+"tracer",[f.now(),t,n],r),function(){if(s.emit((o?"":"no-")+"fn-start",[f.now(),r,o],n),o)try{return e.apply(this,arguments)}catch(t){throw s.emit("fn-err",[arguments,this,t],n),t}finally{s.emit("fn-end",[f.now()],n)}}}};a("actionText,setName,setAttribute,save,ignore,onEnd,getContext,end,get".split(","),function(t,e){h[e]=o(l+e)}),newrelic.noticeError=function(t,e){"string"==typeof t&&(t=new Error(t)),i("err",[t,f.now(),!1,e])}},{}],20:[function(t,e,n){e.exports=function(t){if("string"==typeof t&&t.length)return t.length;if("object"==typeof t){if("undefined"!=typeof ArrayBuffer&&t instanceof ArrayBuffer&&t.byteLength)return t.byteLength;if("undefined"!=typeof Blob&&t instanceof Blob&&t.size)return t.size;if(!("undefined"!=typeof FormData&&t instanceof FormData))try{return JSON.stringify(t).length}catch(e){return}}}},{}],21:[function(t,e,n){var r=0,o=navigator.userAgent.match(/Firefox[\/\s](\d+\.\d+)/);o&&(r=+o[1]),e.exports=r},{}],22:[function(t,e,n){function r(t,e){var n=t.getEntries();n.forEach(function(t){"first-paint"===t.name?d("timing",["fp",Math.floor(t.startTime)]):"first-contentful-paint"===t.name&&d("timing",["fcp",Math.floor(t.startTime)])})}function o(t,e){var n=t.getEntries();n.length>0&&d("lcp",[n[n.length-1]])}function i(t){t.getEntries().forEach(function(t){t.hadRecentInput||d("cls",[t])})}function a(t){if(t instanceof h&&!v){var e=Math.round(t.timeStamp),n={type:t.type};e<=p.now()?n.fid=p.now()-e:e>p.offset&&e<=Date.now()?(e-=p.offset,n.fid=p.now()-e):e=p.now(),v=!0,d("timing",["fi",e,n])}}function c(t){d("pageHide",[p.now(),t])}if(!("init"in NREUM&&"page_view_timing"in NREUM.init&&"enabled"in NREUM.init.page_view_timing&&NREUM.init.page_view_timing.enabled===!1)){var s,f,u,d=t("handle"),p=t("loader"),l=t(25),h=NREUM.o.EV;if("PerformanceObserver"in window&&"function"==typeof window.PerformanceObserver){s=new PerformanceObserver(r);try{s.observe({entryTypes:["paint"]})}catch(m){}f=new PerformanceObserver(o);try{f.observe({entryTypes:["largest-contentful-paint"]})}catch(m){}u=new PerformanceObserver(i);try{u.observe({type:"layout-shift",buffered:!0})}catch(m){}}if("addEventListener"in document){var v=!1,w=["click","keydown","mousedown","pointerdown","touchstart"];w.forEach(function(t){document.addEventListener(t,a,!1)})}l(c)}},{}],23:[function(t,e,n){function r(){function t(){return e?15&e[n++]:16*Math.random()|0}var e=null,n=0,r=window.crypto||window.msCrypto;r&&r.getRandomValues&&(e=r.getRandomValues(new Uint8Array(31)));for(var o,i="xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",a="",c=0;c<i.length;c++)o=i[c],"x"===o?a+=t().toString(16):"y"===o?(o=3&t()|8,a+=o.toString(16)):a+=o;return a}function o(){return a(16)}function i(){return a(32)}function a(t){function e(){return n?15&n[r++]:16*Math.random()|0}var n=null,r=0,o=window.crypto||window.msCrypto;o&&o.getRandomValues&&Uint8Array&&(n=o.getRandomValues(new Uint8Array(31)));for(var i=[],a=0;a<t;a++)i.push(e().toString(16));return i.join("")}e.exports={generateUuid:r,generateSpanId:o,generateTraceId:i}},{}],24:[function(t,e,n){function r(t,e){if(!o)return!1;if(t!==o)return!1;if(!e)return!0;if(!i)return!1;for(var n=i.split("."),r=e.split("."),a=0;a<r.length;a++)if(r[a]!==n[a])return!1;return!0}var o=null,i=null,a=/Version\/(\S+)\s+Safari/;if(navigator.userAgent){var c=navigator.userAgent,s=c.match(a);s&&c.indexOf("Chrome")===-1&&c.indexOf("Chromium")===-1&&(o="Safari",i=s[1])}e.exports={agent:o,version:i,match:r}},{}],25:[function(t,e,n){function r(t){function e(){t(a&&document[a]?document[a]:document[o]?"hidden":"visible")}"addEventListener"in document&&i&&document.addEventListener(i,e,!1)}e.exports=r;var o,i,a;"undefined"!=typeof document.hidden?(o="hidden",i="visibilitychange",a="visibilityState"):"undefined"!=typeof document.msHidden?(o="msHidden",i="msvisibilitychange"):"undefined"!=typeof document.webkitHidden&&(o="webkitHidden",i="webkitvisibilitychange",a="webkitVisibilityState")},{}],26:[function(t,e,n){function r(t,e){var n=[],r="",i=0;for(r in t)o.call(t,r)&&(n[i]=e(r,t[r]),i+=1);return n}var o=Object.prototype.hasOwnProperty;e.exports=r},{}],27:[function(t,e,n){function r(t,e,n){e||(e=0),"undefined"==typeof n&&(n=t?t.length:0);for(var r=-1,o=n-e||0,i=Array(o<0?0:o);++r<o;)i[r]=t[e+r];return i}e.exports=r},{}],28:[function(t,e,n){e.exports={exists:"undefined"!=typeof window.performance&&window.performance.timing&&"undefined"!=typeof window.performance.timing.navigationStart}},{}],ee:[function(t,e,n){function r(){}function o(t){function e(t){return t&&t instanceof r?t:t?s(t,c,i):i()}function n(n,r,o,i){if(!p.aborted||i){t&&t(n,r,o);for(var a=e(o),c=m(n),s=c.length,f=0;f<s;f++)c[f].apply(a,r);var d=u[y[n]];return d&&d.push([x,n,r,a]),a}}function l(t,e){g[t]=m(t).concat(e)}function h(t,e){var n=g[t];if(n)for(var r=0;r<n.length;r++)n[r]===e&&n.splice(r,1)}function m(t){return g[t]||[]}function v(t){return d[t]=d[t]||o(n)}function w(t,e){f(t,function(t,n){e=e||"feature",y[n]=e,e in u||(u[e]=[])})}var g={},y={},x={on:l,addEventListener:l,removeEventListener:h,emit:n,get:v,listeners:m,context:e,buffer:w,abort:a,aborted:!1};return x}function i(){return new r}function a(){(u.api||u.feature)&&(p.aborted=!0,u=p.backlog={})}var c="nr@context",s=t("gos"),f=t(26),u={},d={},p=e.exports=o();p.backlog=u},{}],gos:[function(t,e,n){function r(t,e,n){if(o.call(t,e))return t[e];var r=n();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(t,e,{value:r,writable:!0,enumerable:!1}),r}catch(i){}return t[e]=r,r}var o=Object.prototype.hasOwnProperty;e.exports=r},{}],handle:[function(t,e,n){function r(t,e,n,r){o.buffer([t],r),o.emit(t,e,n)}var o=t("ee").get("handle");e.exports=r,r.ee=o},{}],id:[function(t,e,n){function r(t){var e=typeof t;return!t||"object"!==e&&"function"!==e?-1:t===window?0:a(t,i,function(){return o++})}var o=1,i="nr@id",a=t("gos");e.exports=r},{}],loader:[function(t,e,n){function r(){if(!E++){var t=b.info=NREUM.info,e=l.getElementsByTagName("script")[0];if(setTimeout(u.abort,3e4),!(t&&t.licenseKey&&t.applicationID&&e))return u.abort();f(y,function(e,n){t[e]||(t[e]=n)});var n=a();s("mark",["onload",n+b.offset],null,"api"),s("timing",["load",n]);var r=l.createElement("script");r.src="https://"+t.agent,e.parentNode.insertBefore(r,e)}}function o(){"complete"===l.readyState&&i()}function i(){s("mark",["domContent",a()+b.offset],null,"api")}function a(){return R.exists&&performance.now?Math.round(performance.now()):(c=Math.max((new Date).getTime(),c))-b.offset}var c=(new Date).getTime(),s=t("handle"),f=t(26),u=t("ee"),d=t(24),p=window,l=p.document,h="addEventListener",m="attachEvent",v=p.XMLHttpRequest,w=v&&v.prototype;NREUM.o={ST:setTimeout,SI:p.setImmediate,CT:clearTimeout,XHR:v,REQ:p.Request,EV:p.Event,PR:p.Promise,MO:p.MutationObserver};var g=""+location,y={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",agent:"js-agent.newrelic.com/nr-spa-1177.min.js"},x=v&&w&&w[h]&&!/CriOS/.test(navigator.userAgent),b=e.exports={offset:c,now:a,origin:g,features:{},xhrWrappable:x,userAgent:d};t(19),t(22),l[h]?(l[h]("DOMContentLoaded",i,!1),p[h]("load",r,!1)):(l[m]("onreadystatechange",o),p[m]("onload",r)),s("mark",["firstbyte",c],null,"api");var E=0,R=t(28)},{}],"wrap-function":[function(t,e,n){function r(t){return!(t&&t instanceof Function&&t.apply&&!t[a])}var o=t("ee"),i=t(27),a="nr@original",c=Object.prototype.hasOwnProperty,s=!1;e.exports=function(t,e){function n(t,e,n,o){function nrWrapper(){var r,a,c,s;try{a=this,r=i(arguments),c="function"==typeof n?n(r,a):n||{}}catch(f){p([f,"",[r,a,o],c])}u(e+"start",[r,a,o],c);try{return s=t.apply(a,r)}catch(d){throw u(e+"err",[r,a,d],c),d}finally{u(e+"end",[r,a,s],c)}}return r(t)?t:(e||(e=""),nrWrapper[a]=t,d(t,nrWrapper),nrWrapper)}function f(t,e,o,i){o||(o="");var a,c,s,f="-"===o.charAt(0);for(s=0;s<e.length;s++)c=e[s],a=t[c],r(a)||(t[c]=n(a,f?c+o:o,i,c))}function u(n,r,o){if(!s||e){var i=s;s=!0;try{t.emit(n,r,o,e)}catch(a){p([a,n,r,o])}s=i}}function d(t,e){if(Object.defineProperty&&Object.keys)try{var n=Object.keys(t);return n.forEach(function(n){Object.defineProperty(e,n,{get:function(){return t[n]},set:function(e){return t[n]=e,e}})}),e}catch(r){p([r])}for(var o in t)c.call(t,o)&&(e[o]=t[o]);return e}function p(e){try{t.emit("internal-error",e)}catch(n){}}return t||(t=o),n.inPlace=f,n.flag=a,n}},{}]},{},["loader",2,16,5,3,4]);
+;NREUM.loader_config={accountID:"9704",trustKey:"2390746",agentID:"388202469",licenseKey:"4558326637",applicationID:"388202469"}
+;NREUM.info={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",licenseKey:"4558326637",applicationID:"388202469",sa:1}
+</script>
+<script type="text/javascript">
+var variantValue = "";
+if (window.cmsPageVariant) {
+variantValue = window.cmsPageVariant;
+}
+else {
+variantValue = "no variant";
+}
+newrelic.setCustomAttribute('variant', variantValue);
+</script>
+</head>
+<body id="merging-vs-rebasing" class="wac git tutorials merging-vs-rebasing">
+<div id="header">
+<div class="tutorial-sidebar is-active">
+<div class="_bumper"></div>
+<div class="_wrap">
+<ol>
+<div class="_group">
+<a href="/git/tutorials/learn-git-with-bitbucket-cloud" class="cms-link cms-link--text group-link" >Learn Git</a>
+<div class="_group-wrap">
+<a href="/git/tutorials/learn-git-with-bitbucket-cloud" class="cms-link cms-link--text tutorial-link" >Learn Git with Bitbucket Cloud</a>
+<div class="_toc">
+<a href="/git/tutorials/learn-git-with-bitbucket-cloud#create-the-repository" class="cms-link cms-link--text section-link" >Create a Git repository</a>
+<a href="/git/tutorials/learn-git-with-bitbucket-cloud#copy-and-add-files" class="cms-link cms-link--text section-link" >Copy your Git repository and add files</a>
+<a href="/git/tutorials/learn-git-with-bitbucket-cloud#pull-changes" class="cms-link cms-link--text section-link" >Pull changes from your Git repository on Bitbucket Cloud</a>
+<a href="/git/tutorials/learn-git-with-bitbucket-cloud#git-branch-to-merge" class="cms-link cms-link--text section-link" >Use a Git branch to merge a file</a>
+</div>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/learn-about-code-review-in-bitbucket-cloud" class="cms-link cms-link--text tutorial-link" >Learn about code review in Bitbucket Cloud</a>
+<div class="_toc">
+<a href="/git/tutorials/learn-about-code-review-in-bitbucket-cloud#create-repository" class="cms-link cms-link--text section-link" >Create a repository</a>
+<a href="/git/tutorials/learn-about-code-review-in-bitbucket-cloud#clone-branch" class="cms-link cms-link--text section-link" >Clone and make a change on a new branch</a>
+<a href="/git/tutorials/learn-about-code-review-in-bitbucket-cloud#im-using-git" class="cms-link cms-link--text section-link" >If you're using command line</a>
+<a href="/git/tutorials/learn-about-code-review-in-bitbucket-cloud#im-using-sourcetree" class="cms-link cms-link--text section-link" >If you're using Sourcetree</a>
+<a href="/git/tutorials/learn-about-code-review-in-bitbucket-cloud#create-a-pull-request-to-merge-your-change" class="cms-link cms-link--text section-link" >Create a pull request to merge your change</a>
+</div>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/learn-branching-with-bitbucket-cloud" class="cms-link cms-link--text tutorial-link" >Learn branching in Bitbucket Cloud</a>
+<div class="_toc">
+<a href="/git/tutorials/learn-branching-with-bitbucket-cloud#create-the-repository" class="cms-link cms-link--text section-link" >Get set up</a>
+<a href="/git/tutorials/learn-branching-with-bitbucket-cloud#review-branching-workflow" class="cms-link cms-link--text section-link" >Review branching workflow</a>
+</div>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/learn-undoing-changes-with-bitbucket" class="cms-link cms-link--text tutorial-link" >Learn undoing changes with Bitbucket Cloud</a>
+<div class="_toc">
+<a href="/git/tutorials/learn-undoing-changes-with-bitbucket#git-status" class="cms-link cms-link--text section-link" >git status</a>
+<a href="/git/tutorials/learn-undoing-changes-with-bitbucket#git-log" class="cms-link cms-link--text section-link" >git log</a>
+<a href="/git/tutorials/learn-undoing-changes-with-bitbucket#git-reset" class="cms-link cms-link--text section-link" >git reset</a>
+<a href="/git/tutorials/learn-undoing-changes-with-bitbucket#git-revert" class="cms-link cms-link--text section-link" >git revert</a>
+</div>
+</div>
+</div>
+<div class="_group">
+<a href="/git/tutorials/what-is-version-control" class="cms-link cms-link--text group-link" >Beginner</a>
+<div class="_group-wrap">
+<a href="/git/tutorials/what-is-version-control" class="cms-link cms-link--text tutorial-link" >What is version control</a>
+<div class="_toc">
+<a href="/git/tutorials/what-is-version-control#benefits-of-version-control" class="cms-link cms-link--text section-link" >Benefits of version control</a>
+</div>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/source-code-management" class="cms-link cms-link--text tutorial-link" >Source Code Management</a>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/what-is-git" class="cms-link cms-link--text tutorial-link" >What is Git</a>
+<div class="_toc">
+<a href="/git/tutorials/what-is-git#performance" class="cms-link cms-link--text section-link" >Performance</a>
+<a href="/git/tutorials/what-is-git#security" class="cms-link cms-link--text section-link" >Security</a>
+<a href="/git/tutorials/what-is-git#flexibility" class="cms-link cms-link--text section-link" >Flexibility</a>
+<a href="/git/tutorials/what-is-git#version-control-with-git" class="cms-link cms-link--text section-link" >Version control with Git</a>
+</div>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/why-git" class="cms-link cms-link--text tutorial-link" >Why Git for your Organization</a>
+<div class="_toc">
+<a href="/git/tutorials/why-git#git-for-developers" class="cms-link cms-link--text section-link" >Git for developers</a>
+<a href="/git/tutorials/why-git#git-for-marketing" class="cms-link cms-link--text section-link" >Git for marketing</a>
+<a href="/git/tutorials/why-git#git-for-product-management" class="cms-link cms-link--text section-link" >Git for product management</a>
+<a href="/git/tutorials/why-git#git-for-designers" class="cms-link cms-link--text section-link" >Git for designers</a>
+<a href="/git/tutorials/why-git#git-for-customer-support" class="cms-link cms-link--text section-link" >Git for customer support</a>
+<a href="/git/tutorials/why-git#git-for-human-resources" class="cms-link cms-link--text section-link" >Git for human resources</a>
+<a href="/git/tutorials/why-git#git-for-anyone-managing-budget" class="cms-link cms-link--text section-link" >Git for anyone managing a budget</a>
+</div>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/install-git" class="cms-link cms-link--text tutorial-link" >Install Git</a>
+<div class="_toc">
+<a href="/git/tutorials/install-git#mac-os-x" class="cms-link cms-link--text section-link" >Install Git on Mac OS X</a>
+<a href="/git/tutorials/install-git#windows" class="cms-link cms-link--text section-link" >Install Git on Windows</a>
+<a href="/git/tutorials/install-git#linux" class="cms-link cms-link--text section-link" >Install Git on Linux</a>
+</div>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/git-ssh" class="cms-link cms-link--text tutorial-link" >Git SSH</a>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/export-git-archive" class="cms-link cms-link--text tutorial-link" >Git archive</a>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/gitops" class="cms-link cms-link--text tutorial-link" >GitOps</a>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/atlassian-git-cheatsheet" class="cms-link cms-link--text tutorial-link" >Git Cheatsheet</a>
+</div>
+</div>
+<div class="_group">
+<a href="/git/tutorials/setting-up-a-repository" class="cms-link cms-link--text group-link" >Getting Started</a>
+<div class="_group-wrap">
+<a href="/git/tutorials/setting-up-a-repository" class="cms-link cms-link--text tutorial-link" >Setting up a repository</a>
+<div class="_toc">
+<a href="/git/tutorials/setting-up-a-repository/git-init" class="cms-link cms-link--text section-link" >git init</a>
+<a href="/git/tutorials/setting-up-a-repository/git-clone" class="cms-link cms-link--text section-link" >git clone</a>
+<a href="/git/tutorials/setting-up-a-repository/git-config" class="cms-link cms-link--text section-link" >git config</a>
+<a href="/git/tutorials/git-alias" class="cms-link cms-link--text section-link" >git alias</a>
+</div>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/saving-changes" class="cms-link cms-link--text tutorial-link" >Saving changes</a>
+<div class="_toc">
+<a href="/git/tutorials/saving-changes" class="cms-link cms-link--text section-link" >git add</a>
+<a href="/git/tutorials/saving-changes/git-commit" class="cms-link cms-link--text section-link" >git commit</a>
+<a href="/git/tutorials/saving-changes/git-diff" class="cms-link cms-link--text section-link" >git diff</a>
+<a href="/git/tutorials/saving-changes/git-stash" class="cms-link cms-link--text section-link" >git stash</a>
+<a href="/git/tutorials/saving-changes/gitignore" class="cms-link cms-link--text section-link" >.gitignore</a>
+</div>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/inspecting-a-repository" class="cms-link cms-link--text tutorial-link" >Inspecting a repository</a>
+<div class="_toc">
+<a href="/git/tutorials/inspecting-a-repository" class="cms-link cms-link--text section-link" >git status</a>
+<a href="/git/tutorials/inspecting-a-repository/git-tag" class="cms-link cms-link--text section-link" >git tag</a>
+<a href="/git/tutorials/inspecting-a-repository/git-blame" class="cms-link cms-link--text section-link" >git blame</a>
+</div>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/undoing-changes" class="cms-link cms-link--text tutorial-link" >Undoing changes</a>
+<div class="_toc">
+<a href="/git/tutorials/undoing-changes" class="cms-link cms-link--text section-link" >git checkout</a>
+<a href="/git/tutorials/undoing-changes/git-clean" class="cms-link cms-link--text section-link" >git clean</a>
+<a href="/git/tutorials/undoing-changes/git-revert" class="cms-link cms-link--text section-link" >git revert</a>
+<a href="/git/tutorials/undoing-changes/git-reset" class="cms-link cms-link--text section-link" >git reset</a>
+<a href="/git/tutorials/undoing-changes/git-rm" class="cms-link cms-link--text section-link" >git rm</a>
+</div>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/rewriting-history" class="cms-link cms-link--text tutorial-link" >Rewriting history</a>
+<div class="_toc">
+<a href="/git/tutorials/rewriting-history#git-commit--amend" class="cms-link cms-link--text section-link" >git commit --amend</a>
+<a href="/git/tutorials/rewriting-history/git-rebase" class="cms-link cms-link--text section-link" >git rebase</a>
+<a href="/git/tutorials/rewriting-history#git-rebase-i" class="cms-link cms-link--text section-link" >git rebase -i</a>
+<a href="/git/tutorials/rewriting-history/git-reflog" class="cms-link cms-link--text section-link" >git reflog</a>
+</div>
+</div>
+</div>
+<div class="_group">
+<a href="/git/tutorials/syncing" class="cms-link cms-link--text group-link" >Collaborating</a>
+<div class="_group-wrap">
+<a href="/git/tutorials/syncing" class="cms-link cms-link--text tutorial-link" >Syncing</a>
+<div class="_toc">
+<a href="/git/tutorials/syncing" class="cms-link cms-link--text section-link" >git remote</a>
+<a href="/git/tutorials/syncing/git-fetch" class="cms-link cms-link--text section-link" >git fetch</a>
+<a href="/git/tutorials/syncing/git-push" class="cms-link cms-link--text section-link" >git push</a>
+<a href="/git/tutorials/syncing/git-pull" class="cms-link cms-link--text section-link" >git pull</a>
+</div>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/making-a-pull-request" class="cms-link cms-link--text tutorial-link" >Making a Pull Request</a>
+<div class="_toc">
+<a href="/git/tutorials/making-a-pull-request#how-it-works" class="cms-link cms-link--text section-link" >How it works</a>
+<a href="/git/tutorials/making-a-pull-request#example" class="cms-link cms-link--text section-link" >Example</a>
+<a href="/git/tutorials/making-a-pull-request#where-to-go" class="cms-link cms-link--text section-link" >Where to go from here</a>
+</div>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/using-branches" class="cms-link cms-link--text tutorial-link" >Using branches</a>
+<div class="_toc">
+<a href="/git/tutorials/using-branches" class="cms-link cms-link--text section-link" >git branch</a>
+<a href="/git/tutorials/using-branches/git-checkout" class="cms-link cms-link--text section-link" >git checkout</a>
+<a href="/git/tutorials/using-branches/git-merge" class="cms-link cms-link--text section-link" >git merge</a>
+<a href="/git/tutorials/using-branches/merge-conflicts" class="cms-link cms-link--text section-link" >Merge conflicts</a>
+<a href="/git/tutorials/using-branches/merge-strategy" class="cms-link cms-link--text section-link" >Merge strategies</a>
+</div>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/comparing-workflows" class="cms-link cms-link--text tutorial-link" >Comparing workflows</a>
+<div class="_toc">
+<a href="/git/tutorials/comparing-workflows#centralized-workflow" class="cms-link cms-link--text section-link" >Centralized Workflow</a>
+<a href="/git/tutorials/comparing-workflows/feature-branch-workflow" class="cms-link cms-link--text section-link" >Feature Branch Workflow</a>
+<a href="/git/tutorials/comparing-workflows/gitflow-workflow" class="cms-link cms-link--text section-link" >Gitflow Workflow</a>
+<a href="/git/tutorials/comparing-workflows/forking-workflow" class="cms-link cms-link--text section-link" >Forking Workflow</a>
+</div>
+</div>
+</div>
+<div class="_group">
+<a href="/git/tutorials/svn-to-git-prepping-your-team-migration" class="cms-link cms-link--text group-link" >Migrating to Git</a>
+<div class="_group-wrap">
+<a href="/git/tutorials/svn-to-git-prepping-your-team-migration" class="cms-link cms-link--text tutorial-link" >SVN to Git - prepping for the migration</a>
+<div class="_toc">
+<a href="/git/tutorials/svn-to-git-prepping-your-team-migration#for-administrators" class="cms-link cms-link--text section-link" >For administrators</a>
+<a href="/git/tutorials/svn-to-git-prepping-your-team-migration#basic-git-commands" class="cms-link cms-link--text section-link" >Basic Git commands</a>
+<a href="/git/tutorials/svn-to-git-prepping-your-team-migration#git-migration-tools" class="cms-link cms-link--text section-link" >Git Migration Tools</a>
+<a href="/git/tutorials/svn-to-git-prepping-your-team-migration#for-developers" class="cms-link cms-link--text section-link" >For developers</a>
+</div>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/migrating-overview" class="cms-link cms-link--text tutorial-link" >Migrate to Git from SVN</a>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/migrating-prepare" class="cms-link cms-link--text tutorial-link" >Prepare</a>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/migrating-convert" class="cms-link cms-link--text tutorial-link" >Convert</a>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/migrating-synchronize" class="cms-link cms-link--text tutorial-link" >Synchronize</a>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/migrating-share" class="cms-link cms-link--text tutorial-link" >Share</a>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/migrating-migrate" class="cms-link cms-link--text tutorial-link" >Migrate</a>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/perforce-git" class="cms-link cms-link--text tutorial-link" >Perforce to Git - why to make the move</a>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/perforce-git-migration" class="cms-link cms-link--text tutorial-link" >Migrating from Perforce to Git</a>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/git-move-repository" class="cms-link cms-link--text tutorial-link" >How to move a Git repository with history</a>
+</div>
+</div>
+<div class="_group">
+<a href="/git/tutorials/advanced-overview" class="cms-link cms-link--text group-link" >Advanced Tips</a>
+<div class="_group-wrap">
+<a href="/git/tutorials/advanced-overview" class="cms-link cms-link--text tutorial-link" >Advanced Git Tutorials</a>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/merging-vs-rebasing" class="cms-link cms-link--text tutorial-link" >Merging vs. Rebasing</a>
+<div class="_toc">
+<a href="/git/tutorials/merging-vs-rebasing#conceptual-overview" class="cms-link cms-link--text section-link" >Conceptual Overview</a>
+<a href="/git/tutorials/merging-vs-rebasing#the-golden-rule-of-rebasing" class="cms-link cms-link--text section-link" >The Golden Rule of Rebasing</a>
+<a href="/git/tutorials/merging-vs-rebasing#workflow-walkthrough" class="cms-link cms-link--text section-link" >Workflow Walkthrough</a>
+<a href="/git/tutorials/merging-vs-rebasing#summary" class="cms-link cms-link--text section-link" >Summary</a>
+</div>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/resetting-checking-out-and-reverting" class="cms-link cms-link--text tutorial-link" >Resetting, Checking Out, and Reverting</a>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/git-log" class="cms-link cms-link--text tutorial-link" >Advanced Git log</a>
+<div class="_toc">
+<a href="/git/tutorials/git-log#formatting-log-output" class="cms-link cms-link--text section-link" >Formatting Log Output</a>
+<a href="/git/tutorials/git-log#filtering-the-commit-history" class="cms-link cms-link--text section-link" >Filtering the Commit History</a>
+<a href="/git/tutorials/git-log#summary" class="cms-link cms-link--text section-link" >Summary</a>
+</div>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/git-hooks" class="cms-link cms-link--text tutorial-link" >Git Hooks</a>
+<div class="_toc">
+<a href="/git/tutorials/git-hooks#conceptual-overview" class="cms-link cms-link--text section-link" >Conceptual Overview</a>
+<a href="/git/tutorials/git-hooks#local-hooks" class="cms-link cms-link--text section-link" >Local Hooks</a>
+<a href="/git/tutorials/git-hooks#server-side-hooks" class="cms-link cms-link--text section-link" >Server-side Hooks</a>
+<a href="/git/tutorials/git-hooks#summary" class="cms-link cms-link--text section-link" >Summary</a>
+</div>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/refs-and-the-reflog" class="cms-link cms-link--text tutorial-link" >Refs and the Reflog</a>
+<div class="_toc">
+<a href="/git/tutorials/refs-and-the-reflog#hashes" class="cms-link cms-link--text section-link" >Hashes</a>
+<a href="/git/tutorials/refs-and-the-reflog#refs" class="cms-link cms-link--text section-link" >Refs</a>
+<a href="/git/tutorials/refs-and-the-reflog#packed-refs" class="cms-link cms-link--text section-link" >Packed Refs</a>
+<a href="/git/tutorials/refs-and-the-reflog#special-refs" class="cms-link cms-link--text section-link" >Special Refs</a>
+<a href="/git/tutorials/refs-and-the-reflog#refspecs" class="cms-link cms-link--text section-link" >Refspecs</a>
+<a href="/git/tutorials/refs-and-the-reflog#relative-refs" class="cms-link cms-link--text section-link" >Relative Refs</a>
+<a href="/git/tutorials/refs-and-the-reflog#the-reflog" class="cms-link cms-link--text section-link" >The Reflog</a>
+<a href="/git/tutorials/refs-and-the-reflog#summary" class="cms-link cms-link--text section-link" >Summary</a>
+</div>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/git-submodule" class="cms-link cms-link--text tutorial-link" >Git submodules</a>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/git-subtree" class="cms-link cms-link--text tutorial-link" >Git subtree</a>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/big-repositories" class="cms-link cms-link--text tutorial-link" >Large repositories in Git</a>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/git-lfs" class="cms-link cms-link--text tutorial-link" >Git LFS</a>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/git-gc" class="cms-link cms-link--text tutorial-link" >Git gc</a>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/git-prune" class="cms-link cms-link--text tutorial-link" >Git prune</a>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/git-bash" class="cms-link cms-link--text tutorial-link" >Git Bash</a>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/dotfiles" class="cms-link cms-link--text tutorial-link" >How to store dotfiles</a>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/cherry-pick" class="cms-link cms-link--text tutorial-link" >Git Cherry Pick</a>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/gitk" class="cms-link cms-link--text tutorial-link" >GitK</a>
+</div>
+<div class="_group-wrap">
+<a href="/git/tutorials/git-show" class="cms-link cms-link--text tutorial-link" >Git-show</a>
+</div>
+</div>
+</ol>
+</div>
+</div>
+<div class="hamburger ">
+<div class="_layer -top"></div>
+<div class="_layer -mid"></div>
+<div class="_layer -bottom"></div>
+</div>
+<div class="primary-nav">
+<div class="_wrapper">
+<ul class="_nav-list">
+<div>
+<li>
+<a href="/git" class="cms-link cms-link--text _nav-item -home" >Home</a>
+</li>
+</div>
+<div>
+<li class="tutorials-nav" id="tutorials-nav-mobile">
+<h4 class="_nav-item -tutorials">Tutorials</h4>
+<div class="_sublist"></div>
+</li>
+<li>
+<a href="/git/tutorials" class="cms-link cms-link--text _nav-item -tutorials" >Tutorials</a>
+</li>
+</div>
+<div>
+<li>
+<a href="/git/articles" class="cms-link cms-link--text _nav-item -articles" >Articles</a>
+</li>
+</div>
+<div>
+<li>
+<a href="/git/glossary" class="cms-link cms-link--text _nav-item -glossary" >Glossary</a>
+</li>
+</div>
+</ul>
+</div>
+</div>
+<div class="topbar is-tutorial">
+<div class="_header -is-tutorial">
+<a href="/git/tutorials" class="active">Tutorials</a>
+</div>
+</div>
+<form class="newsletter">
+<input class="is-empty _input" type="email" placeholder="Enter Your Email For Git News">
+<button type="submit" class="_status icon-email-submit">Submit</button>
+</form>
+<a href="#footer" class="button green-hollow secondary newsletter-cta" >Sign up</a>
+<a href="/git/search" class="search-button search-open ">
+<span class="_link icon-search">Search</span>
+</a>
+<a href="/git" class="search-button search-close -in-page hidden">
+<span class="_link icon-search-close -close">Search</span>
+</a>
+</div>
+<div class="page-wrap is-active -gray-bg tutorial-detail">
+<div id="content" class="_content">
+<div class="tutorial-hero">
+<div class="g-column g-12-12 text-center">
+<img src="https://wac-cdn.atlassian.com/dam/jcr:15447956-9d33-4817-9dc6-fd6c86f24240/hero.svg?cdnVersion=1520" loading="lazy" alt="Merging vs rebasing">
+<h1 > Merging vs. Rebasing
+</h1>
+<div class="g-column g-12-12 t-12-12 m-12-12 breadcrumbs">
+<a href="#conceptual-overview" class="cms-link cms-link--text" >Conceptual Overview</a>
+<a href="#the-golden-rule-of-rebasing" class="cms-link cms-link--text" >The Golden Rule of Rebasing</a>
+<a href="#workflow-walkthrough" class="cms-link cms-link--text" >Workflow Walkthrough</a>
+<a href="#summary" class="cms-link cms-link--text" >Summary</a>
+</div></div></div>
+<div class="g-row">
+<div class="g-column g-12-12 g-centered">
+<p>The <code>git rebase</code> command has a reputation for being magical Git voodoo that beginners should stay away from, but it can actually make life much easier for a development team when used with care. In this article, we’ll compare <code>git rebase</code> with the related <code>git merge</code> command and identify all of the potential opportunities to incorporate rebasing into the typical Git workflow.</p>
+<h2 id="conceptual-overview"> Conceptual Overview
+</h2>
+<p>The first thing to understand about <code>git rebase</code> is that it solves the same problem as <code>git merge</code>. Both of these commands are designed to integrate changes from one branch into another branch—they just do it in very different ways.</p>
+<p>Consider what happens when you start working on a new feature in a dedicated branch, then another team member updates the <code>master</code> branch with new commits. This results in a forked history, which should be familiar to anyone who has used Git as a collaboration tool.</p>
+<img src="https://wac-cdn.atlassian.com/dam/jcr:01b0b04e-64f3-4659-af21-c4d86bc7cb0b/01.svg?cdnVersion=1520" loading="lazy" alt="A forked commit history">
+<p>Now, let’s say that the new commits in <code>master</code> are relevant to the feature that you’re working on. To incorporate the new commits into your <code>feature</code> branch, you have two options: merging or rebasing.</p>
+<h3 > The Merge Option
+</h3>
+<p>The easiest option is to merge the <code>master</code> branch into the feature branch using something like the following:</p>
+<div class="component component--codeblock">
+<pre><code>git&nbsp;checkout&nbsp;feature<br/>git&nbsp;merge&nbsp;master</code></pre>
+</div>
+<script type="text/x-component">
+{
+"type":"imkt.wpl.CodeBlock",
+"params": {
+}
+}
+</script>
+<p>Or, you can condense this to a one-liner:</p>
+<div class="component component--codeblock">
+<pre><code>git&nbsp;merge&nbsp;feature&nbsp;master</code></pre>
+</div>
+<script type="text/x-component">
+{
+"type":"imkt.wpl.CodeBlock",
+"params": {
+}
+}
+</script>
+<p>This creates a new “merge commit” in the <code>feature</code> branch that ties together the histories of both branches, giving you a branch structure that looks like this:</p>
+<img src="https://wac-cdn.atlassian.com/dam/jcr:e229fef6-2c2f-4a4f-b270-e1e1baa94055/02.svg?cdnVersion=1520" loading="lazy" alt="Merging master into the feature branch">
+<p>Merging is nice because it’s a <em>non-destructive</em> operation. The existing branches are not changed in any way. This avoids all of the potential pitfalls of rebasing (discussed below).</p>
+<p>On the other hand, this also means that the <code>feature</code> branch will have an extraneous merge commit every time you need to incorporate upstream changes. If <code>master</code> is very active, this can pollute your feature branch’s history quite a bit. While it’s possible to mitigate this issue with advanced <code>git log</code> options, it can make it hard for other developers to understand the history of the project.</p>
+<h3 > The Rebase Option
+</h3>
+<p>As an alternative to merging, you can rebase the <code>feature</code> branch onto <code>master</code> branch using the following commands:</p>
+<div class="component component--codeblock">
+<pre><code>git&nbsp;checkout&nbsp;feature<br/>git&nbsp;rebase&nbsp;master</code></pre>
+</div>
+<script type="text/x-component">
+{
+"type":"imkt.wpl.CodeBlock",
+"params": {
+}
+}
+</script>
+<p>This moves the entire <code>feature</code> branch to begin on the tip of the <code>master</code> branch, effectively incorporating all of the new commits in <code>master</code>. But, instead of using a merge commit, rebasing <em>re-writes</em> the project history by creating brand new commits for each commit in the original branch.</p>
+<img src="https://wac-cdn.atlassian.com/dam/jcr:5b153a22-38be-40d0-aec8-5f2fffc771e5/03.svg?cdnVersion=1520" loading="lazy" alt="Rebasing the feature branch onto master">
+<p>The major benefit of rebasing is that you get a much cleaner project history. First, it eliminates the unnecessary merge commits required by <code>git merge</code>. Second, as you can see in the above diagram, rebasing also results in a perfectly linear project history—you can follow the tip of <code>feature</code> all the way to the beginning of the project without any forks. This makes it easier to navigate your project with commands like <code>git log</code>, <code>git bisect</code>, and <code>gitk</code>.</p>
+<p>But, there are two trade-offs for this pristine commit history: safety and traceability. If you don’t follow the <a href="#the-golden-rule-of-rebasing" data-event="clicked" data-uuid="b3127870-33" data-event-component="linkButton" data-event-container="richText" data-schema-version="1" data-product-key="bitbucket" >Golden Rule of Rebasing</a>, re-writing project history can be potentially catastrophic for your collaboration workflow. And, less importantly, rebasing loses the context provided by a merge commit—you can’t see when upstream changes were incorporated into the feature.</p>
+<h3 > Interactive Rebasing
+</h3>
+<p>Interactive rebasing gives you the opportunity to alter commits as they are moved to the new branch. This is even more powerful than an automated rebase, since it offers complete control over the branch’s commit history. Typically, this is used to clean up a messy history before merging a feature branch into <code>master</code>.</p>
+<p>To begin an interactive rebasing session, pass the <code>i</code> option to the <code>git rebase</code> command:</p>
+<div class="component component--codeblock">
+<pre><code>git&nbsp;checkout&nbsp;feature<br/>git&nbsp;rebase&nbsp;-i&nbsp;master</code></pre>
+</div>
+<script type="text/x-component">
+{
+"type":"imkt.wpl.CodeBlock",
+"params": {
+}
+}
+</script>
+<p>This will open a text editor listing all of the commits that are about to be moved:</p>
+<div class="component component--codeblock">
+<pre><code>pick&nbsp;33d5b7a&nbsp;Message&nbsp;for&nbsp;commit&nbsp;#1<br/>pick&nbsp;9480b3d&nbsp;Message&nbsp;for&nbsp;commit&nbsp;#2<br/>pick&nbsp;5c67e61&nbsp;Message&nbsp;for&nbsp;commit&nbsp;#3</code></pre>
+</div>
+<script type="text/x-component">
+{
+"type":"imkt.wpl.CodeBlock",
+"params": {
+}
+}
+</script>
+<p>This listing defines exactly what the branch will look like after the rebase is performed. By changing the <code>pick</code> command and/or re-ordering the entries, you can make the branch’s history look like whatever you want. For example, if the 2nd commit fixes a small problem in the 1st commit, you can condense them into a single commit with the <code>fixup</code> command:</p>
+<div class="component component--codeblock">
+<pre><code>pick&nbsp;33d5b7a&nbsp;Message&nbsp;for&nbsp;commit&nbsp;#1<br/>fixup&nbsp;9480b3d&nbsp;Message&nbsp;for&nbsp;commit&nbsp;#2<br/>pick&nbsp;5c67e61&nbsp;Message&nbsp;for&nbsp;commit&nbsp;#3</code></pre>
+</div>
+<script type="text/x-component">
+{
+"type":"imkt.wpl.CodeBlock",
+"params": {
+}
+}
+</script>
+<p>When you save and close the file, Git will perform the rebase according to your instructions, resulting in project history that looks like the following:</p>
+<img src="https://wac-cdn.atlassian.com/dam/jcr:fe6942b4-7a60-4464-9181-b67e59e50788/04.svg?cdnVersion=1520" loading="lazy" alt="Squashing a commit with an interactive rebase">
+<p>Eliminating insignificant commits like this makes your feature’s history much easier to understand. This is something that <code>git merge</code> simply cannot do.</p>
+<h2 id="the-golden-rule-of-rebasing"> The Golden Rule of Rebasing
+</h2>
+<p>Once you understand what rebasing is, the most important thing to learn is when <em>not</em> to do it. The golden rule of <code>git rebase</code> is to never use it on <em>public</em> branches.</p>
+<p>For example, think about what would happen if you rebased <code>master</code> onto your <code>feature</code> branch:</p>
+<img src="https://wac-cdn.atlassian.com/dam/jcr:1d22f018-b2c7-4096-9db1-c54940cf4f4e/05.svg?cdnVersion=1520" loading="lazy" alt="Rebasing the master branch">
+<p>The rebase moves all of the commits in <code>master</code> onto the tip of <code>feature</code>. The problem is that this only happened in <em>your</em> repository. All of the other developers are still working with the original <code>master</code>. Since rebasing results in brand new commits, Git will think that your <code>master</code> branch’s history has diverged from everybody else’s.</p>
+<p>The only way to synchronize the two <code>master</code> branches is to merge them back together, resulting in an extra merge commit <em>and</em> two sets of commits that contain the same changes (the original ones, and the ones from your rebased branch). Needless to say, this is a very confusing situation.</p>
+<p>So, before you run <code>git rebase</code>, always ask yourself, “Is anyone else looking at this branch?” If the answer is yes, take your hands off the keyboard and start thinking about a non-destructive way to make your changes (e.g., the <code>git revert</code> command). Otherwise, you’re safe to re-write history as much as you like.</p>
+<h3 > Force-Pushing
+</h3>
+<p>If you try to push the rebased <code>master</code> branch back to a remote repository, Git will prevent you from doing so because it conflicts with the remote <code>master</code> branch. But, you can force the push to go through by passing the <code>--force</code> flag, like so:</p>
+<pre><code># Be very careful with this command! git push --force</code></pre>
+<p>This overwrites the remote <code>master</code> branch to match the rebased one from your repository and makes things very confusing for the rest of your team. So, be very careful to use this command only when you know exactly what you’re doing.</p>
+<p>One of the only times you should be force-pushing is when you’ve performed a local cleanup <em>after</em> you’ve pushed a private feature branch to a remote repository (e.g., for backup purposes). This is like saying, “Oops, I didn’t really want to push that original version of the feature branch. Take the current one instead.” Again, it’s important that nobody is working off of the commits from the original version of the feature branch.</p>
+<h2 id="workflow-walkthrough"> Workflow Walkthrough
+</h2>
+<p>Rebasing can be incorporated into your existing Git workflow as much or as little as your team is comfortable with. In this section, we’ll take a look at the benefits that rebasing can offer at the various stages of a feature’s development.</p>
+<p>The first step in any workflow that leverages <code>git rebase</code> is to create a dedicated branch for each feature. This gives you the necessary branch structure to safely utilize rebasing:</p>
+<img src="https://wac-cdn.atlassian.com/dam/jcr:6af9de07-088b-4f8b-97a7-b66569a9e4ac/06.svg?cdnVersion=1520" loading="lazy" alt="Developing a feature in a dedicated branch">
+<h3 > Local Cleanup
+</h3>
+<p>One of the best ways to incorporate rebasing into your workflow is to clean up local, in-progress features. By periodically performing an interactive rebase, you can make sure each commit in your feature is focused and meaningful. This lets you write your code without worrying about breaking it up into isolated commits—you can fix it up after the fact.</p>
+<p>When calling <code>git rebase</code>, you have two options for the new base: The feature’s parent branch (e.g., <code>master</code>), or an earlier commit in your feature. We saw an example of the first option in the <em>Interactive Rebasing</em> section. The latter option is nice when you only need to fix up the last few commits. For example, the following command begins an interactive rebase of only the last 3 commits.</p>
+<pre><code>git checkout feature git rebase -i HEAD~3</code></pre>
+<p>By specifying <code>HEAD~3</code> as the new base, you’re not actually moving the branch—you’re just interactively re-writing the 3 commits that follow it. Note that this will <em>not</em> incorporate upstream changes into the <code>feature</code> branch.</p>
+<img src="https://wac-cdn.atlassian.com/dam/jcr:079532c4-2594-40ed-a5c4-0e3621b9edff/07.svg?cdnVersion=1520" loading="lazy" alt="Rebasing onto Head~3">
+<p>If you want to re-write the entire feature using this method, the <code>git merge-base</code> command can be useful to find the original base of the <code>feature</code> branch. The following returns the commit ID of the original base, which you can then pass to <code>git rebase</code>:</p>
+<pre><code>git merge-base feature master</code></pre>
+<p>This use of interactive rebasing is a great way to introduce <code>git rebase</code> into your workflow, as it only affects local branches. The only thing other developers will see is your finished product, which should be a clean, easy-to-follow feature branch history.</p>
+<p>But again, this only works for <em>private</em> feature branches. If you’re collaborating with other developers via the same feature branch, that branch is <em>public</em>, and you’re not allowed to re-write its history.</p>
+<p>There is no <code>git merge</code> alternative for cleaning up local commits with an interactive rebase.</p>
+<h3 > Incorporating Upstream Changes Into a Feature
+</h3>
+<p>In the <em>Conceptual Overview</em> section, we saw how a feature branch can incorporate upstream changes from <code>master</code> using either <code>git merge</code> or <code>git rebase</code>. Merging is a safe option that preserves the entire history of your repository, while rebasing creates a linear history by moving your feature branch onto the tip of <code>master</code>.</p>
+<p>This use of <code>git rebase</code> is similar to a local cleanup (and can be performed simultaneously), but in the process it incorporates those upstream commits from <code>master</code>.</p>
+<p>Keep in mind that it’s perfectly legal to rebase onto a remote branch instead of <code>master</code>. This can happen when collaborating on the same feature with another developer and you need to incorporate their changes into your repository.</p>
+<p>For example, if you and another developer named John added commits to the <code>feature</code> branch, your repository might look like the following after fetching the remote <code>feature</code> branch from John’s repository:</p>
+<img src="https://wac-cdn.atlassian.com/dam/jcr:0bb661aa-361d-47ba-8c7b-00b3be0546cb/08.svg?cdnVersion=1520" loading="lazy" alt="Collaborating on the same feature branch">
+<p>You can resolve this fork the exact same way as you integrate upstream changes from <code>master</code>: either merge your local <code>feature</code> with <code>john/feature</code>, or rebase your local <code>feature</code> onto the tip of <code>john/feature</code>.</p>
+<img src="https://wac-cdn.atlassian.com/dam/jcr:1896adb1-5d49-419a-9b50-3a36adac186c/09.svg?cdnVersion=1520" loading="lazy" alt="Merging vs. rebasing onto a remote branch">
+<p>Note that this rebase doesn’t violate the <em>Golden Rule of Rebasing</em> because only your local <code>feature</code> commits are being moved—everything before that is untouched. This is like saying, “add my changes to what John has already done.” In most circumstances, this is more intuitive than synchronizing with the remote branch via a merge commit.</p>
+<p>By default, the <code>git pull</code> command performs a merge, but you can force it to integrate the remote branch with a rebase by passing it the <code>--rebase</code> option.</p>
+<h3 > Reviewing a Feature With a Pull Request
+</h3>
+<p>If you use pull requests as part of your code review process, you need to avoid using <code>git rebase</code> after creating the pull request. As soon as you make the pull request, other developers will be looking at your commits, which means that it’s a <em>public</em> branch. Re-writing its history will make it impossible for Git and your teammates to track any follow-up commits added to the feature.</p>
+<p>Any changes from other developers need to be incorporated with <code>git merge</code> instead of <code>git rebase</code>.</p>
+<p>For this reason, it’s usually a good idea to clean up your code with an interactive rebase <em>before</em> submitting your pull request.</p>
+<h3 > Integrating an Approved Feature
+</h3>
+<p>After a feature has been approved by your team, you have the option of rebasing the feature onto the tip of the <code>master</code> branch before using <code>git merge</code> to integrate the feature into the main code base.</p>
+<p>This is a similar situation to incorporating upstream changes into a feature branch, but since you’re not allowed to re-write commits in the <code>master</code> branch, you have to eventually use <code>git merge</code> to integrate the feature. However, by performing a rebase before the merge, you’re assured that the merge will be fast-forwarded, resulting in a perfectly linear history. This also gives you the chance to squash any follow-up commits added during a pull request.</p>
+<img src="https://wac-cdn.atlassian.com/dam/jcr:df39b1f1-2686-4ee5-90bf-9836783342ce/10.svg?cdnVersion=1520" loading="lazy" alt="Integrating a feature into master with and without a rebase">
+<p>If you’re not entirely comfortable with <code>git rebase</code>, you can always perform the rebase in a temporary branch. That way, if you accidentally mess up your feature’s history, you can check out the original branch and try again. For example:</p>
+<div class="component component--codeblock">
+<pre><code>git&nbsp;checkout&nbsp;feature<br/>git&nbsp;checkout&nbsp;-b&nbsp;temporary-branch<br/>git&nbsp;rebase&nbsp;-i&nbsp;master<br/>#&nbsp;[Clean&nbsp;up&nbsp;the&nbsp;history]<br/>git&nbsp;checkout&nbsp;master<br/>git&nbsp;merge&nbsp;temporary-branch</code></pre>
+</div>
+<script type="text/x-component">
+{
+"type":"imkt.wpl.CodeBlock",
+"params": {
+}
+}
+</script>
+<h2 id="summary"> Summary
+</h2>
+<p>And that’s all you really need to know to start rebasing your branches. If you would prefer a clean, linear history free of unnecessary merge commits, you should reach for <code>git rebase</code> instead of <code>git merge</code> when integrating changes from another branch.</p>
+<p>On the other hand, if you want to preserve the complete history of your project and avoid the risk of re-writing public commits, you can stick with <code>git merge</code>. Either option is perfectly valid, but at least now you have the option of leveraging the benefits of <code>git rebase</code>.</p>
+</div></div>
+<div class="_footer">
+<div class="g-column g-6-12 g-centered">
+<div class="_hero">
+<img src="https://wac-cdn.atlassian.com/dam/jcr:7a828d45-b8d9-49a0-9f43-8f6687110fcb/hero.svg?cdnVersion=1520" loading="lazy" alt="Reset, Checkout, Revert">
+</div>
+<h5 > Next up:
+</h5>
+<h4 > Reset, Checkout, and Revert
+</h4>
+<a href="/git/tutorials/resetting-checking-out-and-reverting" class="cms-link cms-link--text" >Start next tutorial</a>
+</div></div>
+</div>
+</div>
+<div id="footer" class="footer is-tutorial ">
+<div class="g-row _atlassian-logo">
+<div class="g-column g-12-12">
+<h5 > Powered By
+</h5>
+<a href="https://bitbucket.org" class="cms-link cms-link--image" ><img src="https://wac-cdn.atlassian.com/dam/jcr:c3392b46-dcac-4283-8855-dd8fda6918a0/Bitbucket-white.svg?cdnVersion=1520" loading="lazy" alt="Atlassian"></a>
+</div></div>
+<div class="g-row">
+<div class="g-column g-4-12 t-12-12 m-12-12 t-gutterless">
+<h6 > Recommend
+</h6>
+<a href="https://twitter.com/home?status=Switching%20to%20%23Git?%20Use%20the%20Atlassian%20Git%20tutorials%20to%20jumpstart%20your%20training%20in%20Git%20commands%20and%20workflows.%20https://www.atlassian.com/git" class="cms-link cms-link--image social-code" ><img src="https://wac-cdn.atlassian.com/dam/jcr:69b49692-9452-4dd9-aca1-df56b2bbadbd/icon-twitter.svg?cdnVersion=1520" loading="lazy" alt="Twitter"></a>
+<a href="https://www.facebook.com/sharer/sharer.php?u=https://www.atlassian.com/git" class="cms-link cms-link--image social-code" ><img src="https://wac-cdn.atlassian.com/dam/jcr:9c8da5cb-5272-4e89-9cc1-9a3f52265380/icon-facebook.svg?cdnVersion=1520" loading="lazy" alt="Facebook"></a>
+<a href="https://plus.google.com/share?url=https://www.atlassian.com/git" class="cms-link cms-link--image social-code" ><img src="https://wac-cdn.atlassian.com/dam/jcr:3b592a98-07ca-48a6-8b95-e59eae543341/icon-gplus.svg?cdnVersion=1520" loading="lazy" alt="GooglePlus"></a>
+</div><div class="g-column g-4-12 t-12-12 m-12-12 t-gutterless">
+<h6 > Want future articles?
+</h6>
+<form class="newsletter">
+<input class="is-empty _input" type="email" placeholder="Enter Your Email For Git News">
+<button type="submit" class="_status icon-email-submit">Submit</button>
+</form>
+</div><div class="g-column g-4-12 t-12-12 m-12-12 t-gutterless">
+<h6 > Site hosted by
+</h6>
+<a href="/" class="cms-link cms-link--image xx-active-parent-page-link" ><img src="https://wac-cdn.atlassian.com/dam/jcr:ffd56b30-ad4d-4cb5-94be-79c1dd68b1fb/Atlassian-horizontal-white-rgb.svg?cdnVersion=1520" loading="lazy" alt="Bitbucket" class="_bitbucket-logo"></a>
+</div></div>
+<div class="g-row">
+<div class="g-column g-12-12 t-12-12 m-12-12">
+<p class="license"><a class="icon-global-cclicense" href="http://creativecommons.org/licenses/by/2.5/au/" data-event="clicked" data-uuid="028d468a-75" data-event-component="linkButton" data-event-container="richText" data-schema-version="1" data-product-key="bitbucket" data-event="clicked" data-uuid="028d468a-75" data-event-component="linkButton" data-event-container="richText" data-schema-version="1" data-product-key="bitbucket" rel="nofollow">creativecommons.org</a>Except where otherwise noted, all content is licensed under a <a href="http://creativecommons.org/licenses/by/2.5/au/" data-event="clicked" data-uuid="028d468a-75" data-event-component="linkButton" data-event-container="richText" data-schema-version="1" data-product-key="bitbucket" data-event="clicked" data-uuid="028d468a-75" data-event-component="linkButton" data-event-container="richText" data-schema-version="1" data-product-key="bitbucket" rel="nofollow">Creative Commons Attribution 2.5 Australia License</a>.</p> <style type="text/css">.tutorial-sidebar ._group > a:hover { color: #ccc !important; } .tutorial-sidebar ._group-wrap > a:hover, .tutorial-sidebar ._toc > a:hover { color: #fff; } </style>
+</div></div>
+</div>
+<script type="text/javascript">
+var HTTP_PREFIX = "";
+var FEATURE_FLAG_USE_GDPR = true;
+</script>
+<script type="text/javascript" src="https://wac-cdn.atlassian.com/assets/build/js/gitguide/git-app-lite.js?cdnVersion=1520"></script>
+<link rel="stylesheet" href="https://wac-cdn.atlassian.com/assets/build/css/gitguide/site.css?cdnVersion=1520" />
+<script type="text/javascript">
+(function(){
+var imkt = window.imkt || (window.imkt = {});
+imkt.isEditMode = false;
+imkt.isProduction = true;
+imkt.constants = imkt.constants || {};
+imkt.constants.rootPath = "/";
+imkt.constants.assetPath = "https://wac-cdn.atlassian.com" + "/assets/";
+imkt.constants.libPath = imkt.constants.assetPath + "bower_components/";
+imkt.constants.cdnVersionQuery = "?cdnVersion=1520";
+imkt.constants.isDevUser = false;
+imkt.constants.isFreeEnabled = true;
+imkt.constants.getUserAccounts = false;
+imkt.constants.headerLoginMenu = true;
+imkt.constants.public = true;
+imkt.constants.mobileBreakpoint = 640;
+})();
+</script>
+<script type="text/x-component">
+{
+"type":"imkt.pages.WACPage",
+"params": {
+}
+}
+</script>
+<script>
+function initializeATLAnalytics() {
+var pageViewProperties = { contentSite: 'Git Microsite', contentType: 'Microsite', contentProduct: 'Bitbucket' };
+/* get url path, convert to dash format and add it to page view properties. */
+var originProduct = window.location.pathname;
+pageViewProperties.originProduct = "wac" + (originProduct === '/' ? "" : originProduct.replace(new RegExp('/', 'g'),"-"));
+if (typeof ace !== 'undefined') {
+ace.analytics.Initializer.initWithPageAnalytics('kiv6wyh2nw', pageViewProperties, null, null, window.atlGlobalLoadStart);
+}
+}
+</script>
+<script type = "text/javascript">
+/**
+* function to load external js through javascript.
+*
+* @param url - javascript url
+* @param location - location of the dom (e.g. document.head)
+*/
+var loadExternalJS = function(url, location, callback){
+var scriptTag = document.createElement('script');
+scriptTag.src = url;
+scriptTag.type = 'text/javascript';
+/* Then bind the event to the callback function.
+There are several events for cross browser compatibility. */
+scriptTag.onreadystatechange = callback;
+scriptTag.onload = callback;
+window.atlGlobalLoadStart = new Date();
+/* Fire the loading */
+location.appendChild(scriptTag);
+};
+</script>
+<script type="text/plain" class="optanon-category-2">
+loadExternalJS("https://atl-global.atlassian.com/js/atl-global.min.js", document.body, initializeATLAnalytics);
+</script>
+</body>
+<!-- LastRendered: Mar 26, 2021 12:31:52 AM -->
+</html>
